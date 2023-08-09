@@ -1,4 +1,4 @@
-import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode} from 'ton-core';
+import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode, TupleReader} from 'ton-core';
 
 export type Task5Config = {};
 
@@ -28,7 +28,7 @@ export class Task5 implements Contract {
     }
 
     async getFibonacci(provider: ContractProvider){
-        const result = await provider.get("fibonacci_sequence", [{ type: 'int', value: BigInt(1) }, { type: 'int', value: BigInt(3) }])
-        return result.stack.readTuple()
+        const result = await provider.get("fibonacci_sequence", [{ type: 'int', value: BigInt(201) }, { type: 'int', value: BigInt(4) }])
+        return result.gasUsed;
     }
 }
