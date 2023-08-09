@@ -35,7 +35,7 @@
   while (i < n + k){
     b = a + b;
     a = b - a;
-    if (i >= n) {
+    if (i >= n){
       res~tpush(b);
     }
     i = i + 1;
