@@ -36,6 +36,7 @@
     b = a + b;
     a = b - a;
     res~tpush(b);
+    i = i + 1;
   }
   return res;
 }
