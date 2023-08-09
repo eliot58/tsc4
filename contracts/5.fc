@@ -13,11 +13,30 @@
   1923063428480944139667114773918309212080528]
 -}
 
+
+
 () recv_internal() {
 }
 
 ;; testable
 (tuple) fibonacci_sequence (int n, int k) method_id {
-  return null();
+  tuple res = empty_tuple();
+  int f_1 = 0;
+  int f_2 = 1;
+  if (n == 0) {
+    res~tpush(0);
+    res~tpush(1);
+  } elseif (n == 1){
+    res~tpush(1);
+  }
+
+
+  int i = 2;
+  while (i < n + k){
+    b = a + b;
+    a = b - a;
+    res~tpush(b);
+  }
+  return res;
 }
 
