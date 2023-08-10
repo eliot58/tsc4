@@ -12,8 +12,31 @@
 () recv_internal() {
 }
 
+(int) tlen (tuple t) asm "TLEN";
+
 ;; testable
 (tuple) matrix_multiplier(tuple matrixA, tuple matrixB) method_id {
-  return null();
+  tuple res = empty_tuple();
+  int aLen = matrixA.tlen();
+  int bLen = matrixB.tlen();
+  int boLen = matrixB.at(0).tlen();
+  int i = 0;
+  while (i < aLen) {
+    tuple row = empty_tuple();
+    int j = 0;
+    while (j < boLen){
+      int cell_calue = 0;
+      int k = 0;
+      while (k < bLen){
+        cell_calue += matrixA.at(i).at(k) * matrixB.at(k).at(j);
+        k += 1;
+      }
+      row~tpush(cell_calue);
+      j += 1;
+    }
+    res~tpush(row);
+    i += 1;
+  }
+  return res;
 }
 

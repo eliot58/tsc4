@@ -9,5 +9,5 @@ export async function run(provider: NetworkProvider) {
 
     await provider.waitForDeploy(task2.address);
 
-    // run methods on `task2`
+    console.log(await task2.getMatrix());
 }

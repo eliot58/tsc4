@@ -26,4 +26,9 @@ export class Task2 implements Contract {
             body: beginCell().endCell(),
         });
     }
+
+    async getMatrix(provider: ContractProvider){
+        const result = await provider.get("matrix_multiplier", [{ type: 'tuple', items: [{ type: 'tuple', items: [{ type: 'int', value: BigInt(1) },{ type: 'int', value: BigInt(2) },{ type: 'int', value: BigInt(2) }] }, { type: 'tuple', items: [{ type: 'int', value: BigInt(3) },{ type: 'int', value: BigInt(1) },{ type: 'int', value: BigInt(1) }] }]}, { type: 'tuple', items: [{ type: 'tuple', items: [{ type: 'int', value: BigInt(4) },{ type: 'int', value: BigInt(2) }] }, { type: 'tuple', items: [{ type: 'int', value: BigInt(3) },{ type: 'int', value: BigInt(1) }] }, { type: 'tuple', items: [{ type: 'int', value: BigInt(1) },{ type: 'int', value: BigInt(5) }] }]}])
+        return result.stack.readTuple();
+    }
 }
