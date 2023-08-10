@@ -17,15 +17,20 @@
   stack~push_back(tree);
 
   while (~ stack.is_null()) {
-      slice s = stack~pop_back().begin_parse();
+      cell current_node = stack~pop_back();
 
-      repeat (s.slice_refs()) {
-        cell node = s~preload_ref();
-        if (cell_hash(node) == hash) {
-          return node;
-        }
-        stack~push_back(node);
+      if (cell_hash(current_node) == hash) {
+        return current_node;
       }
+
+      stack~push_back(current_node.begin_parse()~load_ref());
   }
   return begin_cell().end_cell();
 }
+
+
+;; slice your_slice = your_cell.begin_parse();
+;; do {
+;;     int your_slice_element = your_slice~load_uint(8);
+;;     ...
+;; } until (~ your_slice.slice_data_empty?());
