@@ -9,5 +9,5 @@ export async function run(provider: NetworkProvider) {
 
     await provider.waitForDeploy(task1.address);
 
-    // run methods on `task1`
+    console.log((await task1.getHash()));
 }
