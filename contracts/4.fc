@@ -14,18 +14,7 @@
   builder res = begin_cell();
   res~store_uint(0, 32);
 
-  cell body = begin_cell()
-    .store_uint(0, 32)
-    .store_slice("long long long message...")
-    .store_ref(begin_cell()
-        .store_slice(" you can store string of almost any length here.")
-        .store_ref(begin_cell()
-            .store_slice(" just don't forget about the 127 chars limit for each slice")
-        .end_cell())
-    .end_cell())
-.end_cell();
-
-  slice s = body.begin_parse();
+  slice s = text.begin_parse();
 
   s~load_uint(32);
   
