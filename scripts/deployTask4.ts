@@ -11,8 +11,5 @@ export async function run(provider: NetworkProvider) {
 
     const res = await task4.getEncrypt();
 
-    console.log(res.loadUint(8));
-    console.log(res.loadUint(8));
-    console.log(res.loadUint(8));
-    console.log(res.loadUint(8));
+    console.log(res);
 }

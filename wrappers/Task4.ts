@@ -29,7 +29,7 @@ export class Task4 implements Contract {
 
     async getEncrypt(provider: ContractProvider){
         const result = await provider.get("caesar_cipher_encrypt", [{ type: 'int', value: BigInt(3) }, { type: 'cell', cell: beginCell().endCell()}])
-        return result.stack.readCell().beginParse();
+        return result.stack;
     }
 
     async getDecrypt(provider: ContractProvider){
