@@ -34,6 +34,6 @@ export class Task4 implements Contract {
 
     async getDecrypt(provider: ContractProvider){
         const result = await provider.get("caesar_cipher_decrypt", [])
-        return result.gasUsed;
+        return result.stack;
     }
 }

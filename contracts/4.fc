@@ -12,7 +12,7 @@
 ;; testable
 (cell) caesar_cipher_encrypt(int shift, cell text) method_id {
   builder res = begin_cell();
-  res~store_uint(0, 32);
+  ;; res~store_uint(0, 32);
 
   slice s = text.begin_parse();
 
@@ -41,7 +41,7 @@
 ;; testable
 (cell) caesar_cipher_decrypt(int shift, cell text) method_id {
   builder res = begin_cell();
-  res~store_uint(0, 32);
+  ;; res~store_uint(0, 32);
 
   slice s = text.begin_parse();
 
