@@ -76,7 +76,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     }
   }
 
-  return begin_cell().store_slice(stack_res~tpop()).store_ref(t~pop_back()).end_cell();
+  return begin_cell().store_uint(0, 32).store_slice(stack_res~tpop()).store_ref(t~pop_back()).end_cell();
 }
 
 ;; testable
