@@ -6,6 +6,13 @@
   character should go to the beginning. Return new text encoded in cell.
 -}
 
+forall X -> int is_null (X x) asm "ISNULL";
+forall X -> (tuple, ()) push_back (tuple tail, X head) asm "CONS";
+forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
+(int) tlen (tuple t) asm "TLEN";
+
+
 () recv_internal() {
 }
 
@@ -19,7 +26,7 @@
       str~store_uint(((char - 65 + shift_amount) % 26) + 65, 8);
     }
   }
-  return str;
+  return str.end_cell().begin_parse();
 }
 
 (slice) decrypt (slice s, int shift_amount) {
@@ -32,11 +39,29 @@
       str~store_uint(((char - 65 - shift_amount) % 26) + 65, 8);
     }
   }
-  return str;
+  return str.end_cell().begin_parse();
+}
+
+(cell) stringTail(tuple t){
+  tuple t = null();
+  while (t.tlen() != 1){
+    builder s = begin_cell();
+    if (t.is_null()) {
+      s~store_slice(t~tpop());
+      s.end_cell();
+      t~push_back(s);
+    } else {
+      s~store_slice(t~tpop());
+      s~store_ref(t~pop_back());
+      s.end_cell();
+      t~push_back(s);
+    }
+  }
+  return t~pop_back();
 }
 
 ;; testable
-(cell) caesar_cipher_encrypt(int shift, cell text) method_id {
+(tuple) caesar_cipher_encrypt(int shift, cell text) method_id {
   builder res = begin_cell();
   res~store_uint(0, 32);
 
@@ -46,28 +71,27 @@
 
   int shift_amount = shift % 26;
 
-  tuple stack_res = null();
+  tuple stack_res = empty_tuple();
 
   tuple stack = null();
 
-  stack~push_back(c);
+  stack~push_back(text);
 
   while (~ stack.is_null()) {
 
     slice s = stack~pop_back().begin_parse();
 
-    stack_res~push_back(encrypt(s,shift_amount));
-
     repeat (s.slice_refs()) {
         stack~push_back(s~load_ref());
     }
+
+    stack_res~tpush(encrypt(s, shift_amount));
   }
 
-  while (~ stack_res.is_null()){
-    slice s = stack_res~pop_back();
-    
-  }
-  
+  res~store_slice(stack_res.at(0));
+
+  res~store_ref(stack_res);
+
   return res.end_cell();
 
 }
@@ -81,11 +105,30 @@
   slice s = text.begin_parse();
 
   s~load_uint(32);
-  
+
   int shift_amount = shift % 26;
 
+  tuple stack_res = empty_tuple();
 
-  
+  tuple stack = null();
+
+  stack~push_back(text);
+
+  while (~ stack.is_null()) {
+
+    slice s = stack~pop_back().begin_parse();
+
+    repeat (s.slice_refs()) {
+        stack~push_back(s~load_ref());
+    }
+
+    stack_res~tpush(decrypt(s,shift_amount)(s, shift_amount));
+  }
+
+  res~store_slice(stack_res.at(0));
+
+  res~store_ref(stack_res);
+
   return res.end_cell();
 }
 

@@ -24,7 +24,8 @@
   int a = 0;
   int b = 1;
   if (n == 0) {
-    res~tpush(0, 1);
+    res~tpush(0);
+    res~tpush(1);
   } elseif (n == 1){
     res~tpush(1);
   }
