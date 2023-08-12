@@ -27,10 +27,14 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         str~store_uint(char, 8);
       }
     } else {
-      if (char <= 90) {
-        str~store_uint(char, 8);
+      if (char >= 65) {
+        if (char <= 90){
+          str~store_uint(((char - 65 + shift_amount) % 26) + 65, 8);
+        } else {
+          str~store_uint(char, 8);
+        }
       } else {
-        str~store_uint(((char - 65 + shift_amount) % 26) + 65, 8);
+        str~store_uint(char, 8);
       }
     }
   }
@@ -71,7 +75,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
       t~push_back(begin_cell().store_slice(stack_res~tpop()).store_ref(tmp).end_cell());
     }
   }
-  return begin_cell().store_uint(0, 32).store_slice(stack_res~tpop()).store_ref(t~tpop()).end_cell();
+  return t~pop_back();
 }
 
 ;; testable

@@ -11,5 +11,5 @@ export async function run(provider: NetworkProvider) {
 
     const res = await task4.getEncrypt();
 
-    console.log(res.readTuple().readString());
+    console.log(res.readCell().beginParse().loadRef().l);
 }
