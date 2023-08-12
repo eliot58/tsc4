@@ -64,22 +64,23 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 (cell) stringTail(tuple stack_res){
   tuple t = null();
-  if (stack_res.tlen() == 1){
+  if (stack_res.tlen() == 1) {
     return begin_cell().store_uint(0, 32).store_slice(stack_res~tpop()).end_cell();
   }
-  while (stack_res.tlen() != 1){
-    if (t.is_null()) {
+  while (stack_res.tlen() != 1) {
+    if (t.is_null()){
       t~push_back(begin_cell().store_slice(stack_res~tpop()).end_cell());
     } else {
       cell tmp = t~pop_back();
       t~push_back(begin_cell().store_slice(stack_res~tpop()).store_ref(tmp).end_cell());
     }
   }
-  return t~pop_back();
+
+  return begin_cell().store_slice(stack_res~tpop()).store_ref(t~pop_back()).end_cell();
 }
 
 ;; testable
-(cell) caesar_cipher_encrypt(int shift, cell text) method_id {
+(tuple) caesar_cipher_encrypt(int shift, cell text) method_id {
 
   int shift_amount = shift % 26;
 
@@ -101,7 +102,6 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
   }
 
   return stringTail(stack_res);
-
 }
 
 
