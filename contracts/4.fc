@@ -28,9 +28,9 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
       }
     } else {
       if (char <= 90) {
-        str~store_uint(((char - 65 + shift_amount) % 26) + 65, 8);
-      } else {
         str~store_uint(char, 8);
+      } else {
+        str~store_uint(((char - 65 + shift_amount) % 26) + 65, 8);
       }
     }
   }
@@ -42,9 +42,17 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
   while (~ s.slice_empty?()) {
     int char = s~load_uint(8);
     if (char >= 97) {
-      str~store_uint(((char - 97 - shift_amount) % 26) + 97, 8);
+      if (char <= 122){
+        str~store_uint(((char - 97 - shift_amount) % 26) + 97, 8);
+      } else {
+        str~store_uint(char, 8);
+      }
     } else {
-      str~store_uint(((char - 65 - shift_amount) % 26) + 65, 8);
+      if (char <= 90) {
+        str~store_uint(char, 8);
+      } else {
+        str~store_uint(((char - 65 - shift_amount) % 26) + 65, 8);
+      }
     }
   }
   return str.end_cell().begin_parse();
@@ -67,7 +75,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 }
 
 ;; testable
-(cell) caesar_cipher_encrypt(int shift, cell text) method_id {
+(tuple) caesar_cipher_encrypt(int shift, cell text) method_id {
 
   int shift_amount = shift % 26;
 
@@ -88,13 +96,13 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     stack_res~tpush(encrypt(s, shift_amount));
   }
 
-  return stringTail(stack_res);
+  return stack_res;
 
 }
 
 
 ;; testable
-(cell) caesar_cipher_decrypt(int shift, cell text) method_id {
+(tuple) caesar_cipher_decrypt(int shift, cell text) method_id {
 
   int shift_amount = shift % 26;
 
@@ -112,9 +120,9 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(decrypt(s,shift_amount));
+    stack_res~tpush(decrypt(s, shift_amount));
   }
 
-  return stringTail(stack_res);
+  return stack_res;
 }
 
