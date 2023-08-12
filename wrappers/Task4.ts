@@ -28,7 +28,7 @@ export class Task4 implements Contract {
     }
 
     async getEncrypt(provider: ContractProvider){
-        const result = await provider.get("caesar_cipher_encrypt", [{ type: 'int', value: BigInt(3) }, { type: 'cell', cell: beginCell().storeStringTail("long long long message...  you can store string of almost any length here. just don't forget about the 127 chars limit for each slice").endCell()}])
+        const result = await provider.get("caesar_cipher_encrypt", [{ type: 'int', value: BigInt(3) }, { type: 'cell', cell: beginCell().storeStringRefTail("long long long message...  you can store string of almost any length here. just don't forget about the 127 chars limit for each slice").endCell()}])
         return result.stack;
     }
 
