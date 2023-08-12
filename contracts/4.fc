@@ -37,18 +37,38 @@
 
 ;; testable
 (cell) caesar_cipher_encrypt(int shift, cell text) method_id {
-  ;; builder res = begin_cell();
-  ;; res~store_uint(0, 32);
+  builder res = begin_cell();
+  res~store_uint(0, 32);
 
-  ;; slice s = text.begin_parse();
+  slice s = text.begin_parse();
 
-  ;; s~load_uint(32);
+  s~load_uint(32);
 
-  ;; int shift_amount = shift % 26;
+  int shift_amount = shift % 26;
 
+  tuple stack_res = null();
 
+  tuple stack = null();
+
+  stack~push_back(c);
+
+  while (~ stack.is_null()) {
+
+    slice s = stack~pop_back().begin_parse();
+
+    stack_res~push_back(encrypt(s,shift_amount));
+
+    repeat (s.slice_refs()) {
+        stack~push_back(s~load_ref());
+    }
+  }
+
+  while (~ stack_res.is_null()){
+    slice s = stack_res~pop_back();
+    
+  }
   
-  ;; return res.end_cell();
+  return res.end_cell();
 
 }
 
