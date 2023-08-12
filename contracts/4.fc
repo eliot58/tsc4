@@ -80,7 +80,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 }
 
 ;; testable
-(tuple) caesar_cipher_encrypt(int shift, cell text) method_id {
+(cell) caesar_cipher_encrypt(int shift, cell text) method_id {
 
   int shift_amount = shift % 26;
 
