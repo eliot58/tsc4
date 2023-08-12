@@ -93,7 +93,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(shiftString(s,shift_amount));
+    stack_res~tpush(shiftString(s, shift_amount));
   }
 
   return stringTail(stack_res);

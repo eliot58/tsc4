@@ -13,11 +13,5 @@ export async function run(provider: NetworkProvider) {
 
     const s = res.readCell().beginParse()
 
-    console.log(s)
-
-    console.log(s.loadUint(32))
-
-    console.log(s.loadStringTail())
-
 
 }
