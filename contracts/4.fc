@@ -75,7 +75,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 }
 
 ;; testable
-(tuple) caesar_cipher_encrypt(int shift, cell text) method_id {
+(cell) caesar_cipher_encrypt(int shift, cell text) method_id {
 
   int shift_amount = shift % 26;
 
@@ -96,13 +96,13 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     stack_res~tpush(encrypt(s, shift_amount));
   }
 
-  return stack_res;
+  return stringTail(stack_res);
 
 }
 
 
 ;; testable
-(tuple) caesar_cipher_decrypt(int shift, cell text) method_id {
+(cell) caesar_cipher_decrypt(int shift, cell text) method_id {
 
   int shift_amount = shift % 26;
 
@@ -123,6 +123,6 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     stack_res~tpush(decrypt(s, shift_amount));
   }
 
-  return stack_res;
+  return stringTail(stack_res);
 }
 
