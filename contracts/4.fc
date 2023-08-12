@@ -42,19 +42,14 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
   return str.end_cell().begin_parse();
 }
 
-(cell) stringTail(tuple t){
+(cell) stringTail(tuple stack_res){
   tuple t = null();
-  while (t.tlen() != 1){
-    builder s = begin_cell();
+  while (stack_res.tlen() != 1){
     if (t.is_null()) {
-      s~store_slice(t~tpop());
-      s.end_cell();
-      t~push_back(s);
+      t~push_back(begin_cell().store_slice(stack_res~tpop()).end_cell());
     } else {
-      s~store_slice(t~tpop());
-      s~store_ref(t~pop_back());
-      s.end_cell();
-      t~push_back(s);
+      cell tmp = t~pop_back();
+      t~push_back(begin_cell().store_slice(stack_res~tpop()).store_ref(tmp).end_cell());
     }
   }
   return t~pop_back();
@@ -90,7 +85,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
   res~store_slice(stack_res.at(0));
 
-  res~store_ref(stack_res);
+  res~store_ref(stringTail(stack_res));
 
   return res.end_cell();
 
@@ -122,12 +117,12 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(decrypt(s,shift_amount)(s, shift_amount));
+    stack_res~tpush(decrypt(s,shift_amount));
   }
 
   res~store_slice(stack_res.at(0));
 
-  res~store_ref(stack_res);
+  res~store_ref(stringTail(stack_res));
 
   return res.end_cell();
 }
