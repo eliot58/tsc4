@@ -16,7 +16,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 () recv_internal() {
 }
 
-(slice) encrypt (slice s, int shift_amount) {
+(slice) shiftString (slice s, int shift_amount) {
   builder str = begin_cell();
   while (~ s.slice_empty?()) {
     int char = s~load_uint(8);
@@ -24,21 +24,6 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
       str~store_uint(((char - 97 + shift_amount) % 26) + 97, 8);
     } elseif ((char >= 65) & (char <= 90)) {
       str~store_uint(((char - 65 + shift_amount) % 26) + 65, 8);
-    } else {
-      str~store_uint(char, 8);
-    }
-  }
-  return str.end_cell().begin_parse();
-}
-
-(slice) decrypt (slice s, int shift_amount) {
-  builder str = begin_cell();
-  while (~ s.slice_empty?()) {
-    int char = s~load_uint(8);
-    if ((char >= 97) & (char <= 122)) {
-      str~store_uint(((char - 97 - shift_amount) % 26) + 97, 8);
-    } elseif ((char >= 65) & (char <= 90)) {
-      str~store_uint(((char - 65 - shift_amount) % 26) + 65, 8);
     } else {
       str~store_uint(char, 8);
     }
@@ -82,7 +67,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(encrypt(s, shift_amount));
+    stack_res~tpush(shiftString(s, shift_amount));
   }
 
   return stringTail(stack_res);
@@ -108,7 +93,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(encrypt(s,shift_amount));
+    stack_res~tpush(shiftString(s,shift_amount));
   }
 
   return stringTail(stack_res);
