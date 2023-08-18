@@ -31,10 +31,10 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
   return str.end_cell().begin_parse();
 }
 
-(cell) stringTail(cell d, int c){
+(cell) stringTail(cell d){
   tuple t = null();
   (int key, slice val, int flag) = d.udict_get_max?(256);
-  if (c == 1) {
+  if (key == 1) {
     return begin_cell().store_uint(0, 32).store_slice(val).end_cell();
   }
   while (key != 1) {
@@ -75,7 +75,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     i = i + 1;
   }
 
-  return stringTail(d, i - 1);
+  return stringTail(d);
 }
 
 
@@ -104,6 +104,6 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     i = i + 1;
   }
 
-  return stringTail(d, i - 1);
+  return stringTail(d);
 }
 
