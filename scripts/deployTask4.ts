@@ -1,4 +1,4 @@
-import { toNano } from 'ton-core';
+import { beginCell, toNano } from 'ton-core';
 import { Task4 } from '../wrappers/Task4';
 import { compile, NetworkProvider } from '@ton-community/blueprint';
 
@@ -11,7 +11,7 @@ export async function run(provider: NetworkProvider) {
 
     const res = await task4.getEncrypt();
 
-    const s = res.readCell().beginParse()
+    console.log(res)
 
 
 }

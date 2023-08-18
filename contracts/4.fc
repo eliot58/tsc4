@@ -31,21 +31,23 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
   return str.end_cell().begin_parse();
 }
 
-(cell) stringTail(tuple stack_res){
+(cell) stringTail(cell d, int c){
   tuple t = null();
-  if (stack_res.tlen() == 1) {
-    return begin_cell().store_uint(0, 32).store_slice(stack_res~tpop()).end_cell();
+  (int key, slice val, int flag) = d.udict_get_max?(256);
+  if (c == 1) {
+    return begin_cell().store_uint(0, 32).store_slice(val).end_cell();
   }
-  while (stack_res.tlen() != 1) {
+  while (key != 1) {
     if (t.is_null()){
-      t~push_back(begin_cell().store_slice(stack_res~tpop()).end_cell());
+      t~push_back(begin_cell().store_slice(val).end_cell());
     } else {
       cell tmp = t~pop_back();
-      t~push_back(begin_cell().store_slice(stack_res~tpop()).store_ref(tmp).end_cell());
+      t~push_back(begin_cell().store_slice(val).store_ref(tmp).end_cell());
     }
+    (key, val, flag) = d.udict_get_prev?(256, key);
   }
 
-  return begin_cell().store_uint(0, 32).store_slice(stack_res~tpop()).store_ref(t~pop_back()).end_cell();
+  return begin_cell().store_uint(0, 32).store_slice(val).store_ref(t~pop_back()).end_cell();
 }
 
 ;; testable
@@ -53,11 +55,13 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
   int shift_amount = shift % 26;
 
-  tuple stack_res = empty_tuple();
+  cell d = new_dict();
 
   tuple stack = null();
 
   stack~push_back(text);
+
+  int i = 1;
 
   while (~ stack.is_null()) {
 
@@ -67,10 +71,11 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(shiftString(s, shift_amount));
+    d.udict_set(256, i, shiftString(s, shift_amount));
+    i = i + 1;
   }
 
-  return stringTail(stack_res);
+  return stringTail(d, i - 1);
 }
 
 
@@ -79,11 +84,13 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
   int shift_amount = shift % 26;
 
-  tuple stack_res = empty_tuple();
+  cell d = new_dict();
 
   tuple stack = null();
 
   stack~push_back(text);
+
+  int i = 1;
 
   while (~ stack.is_null()) {
 
@@ -93,9 +100,10 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
         stack~push_back(s~load_ref());
     }
 
-    stack_res~tpush(shiftString(s, shift_amount));
+    d.udict_set(256, i, shiftString(s, shift_amount));
+    i = i + 1;
   }
 
-  return stringTail(stack_res);
+  return stringTail(d, i - 1);
 }
 

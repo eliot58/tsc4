@@ -9,5 +9,5 @@ export async function run(provider: NetworkProvider) {
 
     await provider.waitForDeploy(task5.address);
 
-    console.log(await task5.getFibonacci());
+    console.log((await task5.getFibonacci()).readTuple());
 }
